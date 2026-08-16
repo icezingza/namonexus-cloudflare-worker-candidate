@@ -1,0 +1,11 @@
+{
+  "name": "namonexus-production-candidate",
+  "main": "worker.ts",
+  "compatibility_date": "2026-08-17",
+  "assets": {
+    "directory": "./dist/public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  }
+}
