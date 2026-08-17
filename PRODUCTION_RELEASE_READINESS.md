@@ -2,9 +2,9 @@
 
 ## Candidate boundary
 
-This isolated candidate is derived only from the approved clean handoff ZIP. It adds a server-side `POST /api/contact` candidate implementation and tests, but it is **not production-approved, not deployed, and not configured with a Resend secret**.
+This isolated candidate is derived only from the approved clean handoff ZIP. The frontend Contact experience is now **Mode A**: interface-only, no network submission, no provider call, and no success state that could imply delivery. The server-side `POST /api/contact` candidate implementation and tests remain in the repository as a separately gated future integration, but it is not called by the Mode A frontend.
 
-The Contact endpoint fails closed with a generic `503` when `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, or `CONTACT_TO_EMAIL` is absent. No API key, production recipient, DNS change, provider dashboard change, hosting change, or real email send exists in this worktree.
+The server candidate still fails closed with a generic `503` when `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, or `CONTACT_TO_EMAIL` is absent. No API key, production recipient, DNS change, provider dashboard change, hosting change, or real email send exists in this worktree.
 
 ## Asset and rights audit
 
@@ -22,9 +22,9 @@ This is a technical readiness review, not legal rights clearance. Asset ownershi
 
 ## Contact implementation status
 
-The live frontend routes remain `/`, `/capability`, `/principles`, and `/contact`. The Contact page now validates through the shared `shared/contact.ts` contract and submits only approved high-level fields to `/api/contact`.
+The live frontend routes remain `/`, `/capability`, `/principles`, and `/contact`. The Contact page retains the approved data-minimizing field set and shared contract labels for interface review, but Mode A does not submit the form to `/api/contact`. The page clearly states that the inquiry service is not active, exposes no unapproved fallback address, and keeps the submit control disabled.
 
-The server implementation in `server/contact.ts` and `server/index.ts` includes:
+The retained server candidate in `server/contact.ts` and `server/index.ts` includes:
 
 - server-side required-field, work-email, enum, consent, 1,200-character, and sensitive-content validation;
 - optional `Broad timing` allow-list validation;
@@ -37,7 +37,7 @@ The server implementation in `server/contact.ts` and `server/index.ts` includes:
 - generic provider and error responses;
 - redacted operational logs containing request IDs and event types only.
 
-The implementation is **not yet production-ready as an operational system**. In-memory rate limiting is not sufficient for a multi-instance deployment, and real provider, privacy, monitoring, incident-response, and rollback evidence is still absent.
+The retained server implementation is **not yet production-ready as an operational system**. It is outside the Mode A browser path. In-memory rate limiting is not sufficient for a multi-instance deployment, and real provider, privacy, monitoring, incident-response, and rollback evidence is still absent.
 
 ## Remaining unverified or blocked gates
 

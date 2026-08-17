@@ -1,83 +1,19 @@
 import { FormEvent, useState } from "react";
 import PrototypeNav, { Footer } from "@/components/PrototypeNav";
-import {
-  SITUATION_MAX_LENGTH,
-  validateContactPayload,
-  type ContactField,
-} from "@shared/contact";
+import { SITUATION_MAX_LENGTH, type ContactField } from "@shared/contact";
 
 type FormErrors = Partial<Record<ContactField, string>>;
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [serverError, setServerError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [serviceNotice, setServiceNotice] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    const website = String(data.get("website") ?? "").trim();
-
-    // Do not send honeypot submissions to the server.
-    if (website) return;
-
-    const validation = validateContactPayload({
-      name: data.get("name"),
-      email: data.get("email"),
-      organization: data.get("organization"),
-      context: data.get("context"),
-      focus: data.get("focus"),
-      situation: data.get("situation"),
-      timing: data.get("timing"),
-      consent: data.get("consent"),
-    });
-
-    setServerError("");
-    if (!validation.ok) {
-      setErrors(validation.fields);
-      return;
-    }
-
     setErrors({});
-    setSubmitting(true);
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(validation.value),
-      });
-      const responseBody = (await response.json().catch(() => ({}))) as {
-        fields?: FormErrors;
-        message?: string;
-      };
-
-      if (!response.ok) {
-        if (response.status === 400 && responseBody.fields)
-          setErrors(responseBody.fields);
-        else if (response.status === 429)
-          setServerError("Please wait before trying again.");
-        else
-          setServerError(
-            responseBody.message ??
-              "We could not accept this inquiry. Please try again."
-          );
-        return;
-      }
-
-      setSubmitted(true);
-    } catch {
-      setServerError(
-        "We could not connect to the inquiry service. Please try again later."
-      );
-    } finally {
-      setSubmitting(false);
-    }
+    setServiceNotice(
+      "The inquiry service is not active yet. The contact channel is being prepared; no information was sent or stored."
+    );
   }
 
   const error = (field: ContactField) =>
@@ -123,40 +59,17 @@ export default function Contact() {
               HIGH-LEVEL QUALIFICATION ONLY
             </span>
           </div>
-          {submitted ? (
-            <div
-              className="mt-8 border border-cyan-300/40 p-8"
-              role="status"
-              aria-live="polite"
-            >
-              <div className="mono text-cyan-300">INQUIRY ACCEPTED</div>
-              <h3 className="mt-4 text-3xl font-semibold">
-                Your inquiry was accepted for review.
-              </h3>
-              <p className="mt-4 leading-7 text-slate-400">
-                This confirmation does not claim email delivery or a response
-                time. No confidential material should be submitted through this
-                form.
-              </p>
-              <button
-                type="button"
-                className="mt-7 border border-cyan-300/50 px-4 py-3 text-sm text-cyan-200 focus-visible:outline-2 focus-visible:outline-cyan-200"
-                onClick={() => {
-                  setErrors({});
-                  setServerError("");
-                  setSubmitted(false);
-                }}
-              >
-                Send another inquiry
-              </button>
-            </div>
-          ) : (
-            <form
-              className="mt-8 grid gap-5 md:grid-cols-2"
-              onSubmit={handleSubmit}
-              noValidate
-              aria-busy={submitting}
-            >
+          <div className="mt-8 border border-fuchsia-300/35 bg-fuchsia-300/5 p-5" role="status" aria-live="polite">
+            <div className="mono text-fuchsia-200">CONTACT CHANNEL / PREPARING</div>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              The inquiry service is not active yet. This form is available for interface review only; no information is sent or stored, and no submission can be accepted at this stage.
+            </p>
+          </div>
+          <form
+            className="mt-8 grid gap-5 md:grid-cols-2"
+            onSubmit={handleSubmit}
+            noValidate
+          >
               <div>
                 <label htmlFor="name" className="block text-sm font-semibold">
                   How should we address you?
@@ -309,31 +222,29 @@ export default function Contact() {
                 </label>
                 {error("consent")}
               </div>
-              {serverError && (
+              {serviceNotice && (
                 <p
-                  className="md:col-span-2 text-sm text-fuchsia-300"
+                  className="md:col-span-2 text-sm text-fuchsia-200"
                   role="alert"
                   aria-live="assertive"
                 >
-                  {serverError}
+                  {serviceNotice}
                 </p>
               )}
               <div className="flex flex-col gap-4 border-t border-cyan-300/15 pt-5 md:col-span-2 md:flex-row md:items-center md:justify-between">
                 <p className="max-w-xl text-xs leading-5 text-slate-500">
-                  High-level inquiry only. The server validates the request
-                  before any approved provider is called. Do not submit
-                  confidential information.
+                  Contact channel is being prepared. This page does not send or store inquiry data, and there is no approved fallback email channel yet.
                 </p>
                 <button
                   type="submit"
-                  disabled={submitting}
-                  className="bg-cyan-300 px-5 py-3 text-sm font-semibold text-[#0A0F2C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 disabled:cursor-wait disabled:opacity-60"
+                  disabled
+                  aria-disabled="true"
+                  className="cursor-not-allowed border border-slate-500/40 px-5 py-3 text-sm font-semibold text-slate-500 opacity-80"
                 >
-                  {submitting ? "Submitting…" : "Send inquiry →"}
+                  Inquiry service not active
                 </button>
               </div>
             </form>
-          )}
         </section>
       </main>
       <Footer />

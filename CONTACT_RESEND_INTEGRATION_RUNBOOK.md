@@ -2,7 +2,7 @@
 
 ## Current decision
 
-The current candidate contains a server-side `POST /api/contact` implementation and a frontend integration, but the provider is deliberately **not configured**. Without the required server-only environment values, the endpoint fails closed with a generic `503`; it does not call Resend and no real email is sent. DNS, provider dashboard, hosting, and production changes remain outside this candidate.
+The current candidate retains a server-side `POST /api/contact` implementation for a separately approved future integration, but the live frontend is currently **Contact Mode A**: the form is interface-only, does not call the endpoint, does not call Resend, and cannot display a submission success state. Without the required server-only environment values, the retained endpoint fails closed with a generic `503`; no real email is sent. DNS, provider dashboard, hosting, and production changes remain outside this candidate.
 
 > Never put `RESEND_API_KEY` in browser code, `client/`, a `VITE_*` variable, a static asset, a committed `.env` file, or a client-visible response.
 
@@ -99,7 +99,7 @@ Add request rate limiting, duplicate/replay handling, honeypot or CAPTCHA policy
 
 ## Production enablement commands
 
-These commands are templates for the owner or hosting administrator. They were not executed with a real key in this candidate task.
+These commands are templates for a separately approved future provider integration. They were not executed with a real key in this candidate task, and they must not be used to enable the current Mode A frontend.
 
 ```bash
 # Run locally only after the server integration exists and secrets are supplied securely.
@@ -116,7 +116,7 @@ For a managed hosting provider, set the same values in the provider's **server-o
 
 ## Rollback
 
-If delivery, privacy, validation, or abuse behavior is not acceptable, disable the provider integration or route the form back to a no-provider state, remove the provider secret from the active environment, and preserve the evidence needed for incident review. The frontend must remain usable without an external provider.
+If a future provider integration is not acceptable, disable the provider integration and keep the frontend in Mode A/no-provider state, remove the provider secret from the active environment, and preserve the evidence needed for incident review. The frontend must remain usable without an external provider.
 
 ## Official references
 
