@@ -28,3 +28,16 @@ Source: https://developers.cloudflare.com/workers/static-assets/direct-upload/
 ## Scope boundary
 
 This task must not attach any custom domain, create DNS records, configure Resend secrets, create real provider keys, or send an email. The Worker should be deployed with provider values absent so `/api/contact` returns generic 503. The final validation must use the generated workers.dev URL only.
+
+## Mode A release deployment record
+
+The Mode A release candidate was deployed from repository commit `3123a574d248245c938742e5ed44c51debb5209b` to the existing workers.dev-only Worker `namonexus-production-candidate` using Wrangler OAuth with the least-privilege account/user/Workers scopes approved for this staging operation.
+
+- Staging URL: `https://namonexus-production-candidate.icezingza.workers.dev`
+- Current version ID: `d8f14f3c-dfe5-4be6-86f1-dc6c92418b49`
+- Current deployment ID: `f85903d2-5abc-4e92-a029-37b4a3ee7788`
+- Traffic: 100% to the current Mode A version
+- Rollback target version: `3ecfad75-7408-4e28-9940-e51ec2af0543`
+- Rollback target deployment: `5c0eb1ef-bcf9-4329-a003-2467c3e232d1`
+
+Rollback is a controlled action only. It requires an explicit incident decision and should be performed by promoting the recorded prior version through the Cloudflare Workers Deployments control or the approved Wrangler/API runbook. No rollback was executed during this release.

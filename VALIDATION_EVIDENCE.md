@@ -1,110 +1,109 @@
-# NamoNexus Cloudflare staging validation evidence
+# NamoNexus Mode A staging release validation evidence
 
-## Source, isolation, and repository
+## Release identity and scope
 
-The supplied Cloudflare Worker handoff ZIP was verified before extraction. Its SHA-256 is:
+The release candidate was built only from the verified NamoNexus Cloudflare Worker handoff source. The source handoff SHA-256 is:
 
 ```text
 f473f1b67f075667183fcee7506b2053db2f788d5ecfa60ac12236ad1a6a9034
 ```
 
-The candidate is isolated at `/home/ubuntu/namonexus-cloudflare-candidate` on branch `feature/cloudflare-worker-staging`. The private repository is `https://github.com/icezingza/namonexus-cloudflare-worker-candidate`. The reviewed source commit before deployment was `38c16ebc8ae717dec0d49e29c075d6f8b4745de7`. No custom domain, DNS record, production Worker, Resend configuration, or real-email action was performed.
-
-## Local build and tests
-
-A fresh candidate install completed with pnpm `10.4.1`:
+The working repository is the private GitHub candidate repository at `https://github.com/icezingza/namonexus-cloudflare-worker-candidate`. This release was created on branch `feature/contact-mode-a-staging-release` at commit:
 
 ```text
-pnpm install --frozen-lockfile --ignore-scripts   PASS
-pnpm check                                        PASS
-pnpm test                                         PASS — 14 tests (8 Node + 6 Worker)
-pnpm build                                        PASS — Vite assets to dist/public
+3123a574d248245c938742e5ed44c51debb5209b
 ```
 
-The direct `lucide-react` dependency resolves to exact `0.453.0`, and the Resend SDK resolves to exact `6.20.0`. The build emitted only the existing non-blocking Vite chunk-size advisory. No `.env`, provider secret, `node_modules`, or build output was committed to the repository.
+The worktree was built from the repository source. No outer ZIP, flattened export, `node_modules`, build output, `.env`, secret, watermarked media, DNS record, custom domain, Hostinger setting, production Worker, Resend setting, analytics configuration, or production route was changed.
 
-## Worker Contact tests
+## Files changed in the release commit
 
-The deterministic Node and Worker tests cover empty payload, sensitive-term blocking, mock provider success, missing provider configuration, honeypot handling, unapproved origin, content type, body-size limit, and rate limiting. The missing-provider path returns a generic `503` before a provider call.
+| File | Change | Scope |
+| --- | --- | --- |
+| `client/src/pages/Contact.tsx` | Converted Contact UI to explicit Mode A preview state; removed fetch/API submission and false success behavior; disabled inquiry action while the channel is being prepared | Frontend only |
+| `PRODUCTION_RELEASE_READINESS.md` | Synchronized readiness status with Mode A and separated frontend preview behavior from the future server candidate | Documentation |
+| `CONTACT_RESEND_INTEGRATION_RUNBOOK.md` | Marked the current frontend as Mode A and kept Resend as a future gated integration | Documentation |
 
-| Case | Result |
-| --- | --- |
-| Empty payload | PASS — field-level validation errors |
-| Sensitive terms | PASS — blocked before provider state |
-| Valid request with mock sender | PASS — `202`; provider is mocked |
-| Missing provider configuration | PASS — generic `503` |
-| Populated honeypot | PASS — generic `202`; payload not forwarded |
-| Unapproved origin | PASS — `403` |
-| Wrong content type | PASS — `415` |
-| Request-size limit | PASS — `413` |
-| Rate limit | PASS — `429` with `Retry-After` |
+## Local reproducibility gates
 
-## Cloudflare staging deployment
+The exact release commit passed the required clean validation using pnpm `10.4.1` and the committed lockfile:
 
-The approved candidate was deployed to a workers.dev-only staging Worker:
+```text
+pnpm install --frozen-lockfile    PASS
+pnpm check                        PASS
+pnpm test --run                   PASS — 14 tests (8 Node + 6 Worker)
+pnpm build                        PASS — Vite assets generated in dist/public
+```
+
+The Vite build generated five files including the reviewed asset directory marker, `index.html`, the current JavaScript bundle, the current CSS bundle, and `favicon.svg`. No secret values were present in source, build output, or committed evidence.
+
+## Contact Mode A behavior
+
+Mode A is deliberately preview-safe. The Contact page does not call `/api/contact`, email, CRM, database, storage, analytics, or any other submission provider. It does not show a success state because no inquiry is accepted. The interface states that the inquiry service is not active and that the contact channel is being prepared; the inquiry button is disabled until an approved channel exists.
+
+The form retains the approved data-minimizing field set: name, work email, organization, organization context, conversation focus, high-level situation, broad timing, consent, and honeypot. The page warns users not to provide health information, financial details, credentials, security secrets, incident evidence, regulated records, or confidential/proprietary implementation details.
+
+The future Worker endpoint was tested separately with a non-sensitive `.invalid` synthetic payload. Without provider secrets it returned the generic fail-closed response:
+
+```text
+HTTP 503
+{"ok":false,"message":"The inquiry service is not configured."}
+```
+
+This direct endpoint check is not a Contact UI submission. The browser UI does not invoke the endpoint. A request that supplied the staging origin while no allowed origin was configured returned `403 Origin is not allowed`, which is consistent with the Worker origin policy and does not send data to a provider.
+
+## Staging deployment
+
+The release was deployed only to the existing workers.dev staging Worker:
 
 | Item | Value |
 | --- | --- |
 | Worker name | `namonexus-production-candidate` |
 | Worker ID | `16c3de08f48242a5af0719df8e4f37e2` |
-| Version ID | `3ecfad75-7408-4e28-9940-e51ec2af0543` |
-| Deployment ID | `5c0eb1ef-bcf9-4329-a003-2467c3e232d1` |
 | Staging URL | `https://namonexus-production-candidate.icezingza.workers.dev` |
-| workers.dev subdomain | Enabled for this Worker |
+| Current version ID | `d8f14f3c-dfe5-4be6-86f1-dc6c92418b49` |
+| Current deployment ID | `f85903d2-5abc-4e92-a029-37b4a3ee7788` |
+| Deployment traffic | 100% to the current version |
+| Deployment source | Wrangler OAuth, staging Worker only |
+| workers.dev subdomain | Enabled |
 | Custom domain/DNS | Not configured or changed |
 
-The user-provided Cloudflare API token was used only in the deployment process environment. Its value was not written to source, logs, build output, repository, or evidence files. The R2 S3 credentials were not used.
+The deployment uploaded five new or modified static assets and bound the existing `ASSETS` binding. The prior F473 staging deployment remains in version history as rollback target `3ecfad75-7408-4e28-9940-e51ec2af0543` with deployment ID `5c0eb1ef-bcf9-4329-a003-2467c3e232d1`.
 
-The deployed asset manifest contains four files:
+## Live route matrix
 
-| Path | Cloudflare asset hash | Size |
-| --- | --- | ---: |
-| `/assets/index-6MOBI1uY.js` | `543a1a72b9e156e1bf106a45f0eeecfb` | 357,945 bytes |
-| `/assets/index-ByL8kSJJ.css` | `2debe052c4e41abb3ad8c00fcc56950d` | 124,827 bytes |
-| `/favicon.svg` | `b78bf2e60f69b87039f26b7ec7d0b051` | 420 bytes |
-| `/index.html` | `70b68bd50e010cbdbfd810a28c2323b1` | 367,757 bytes |
+All route checks below were performed against the current workers.dev deployment.
 
-## Live route and API matrix
-
-The matrix was collected from the deployed workers.dev URL after enabling the Worker subdomain. The unknown frontend path returned the Vite SPA shell and the application’s own 404 view, rather than Cloudflare’s default placeholder.
-
-| Route | Result | Content evidence |
+| Route | Result | Evidence |
 | --- | --- | --- |
-| `/` | PASS — HTTP 200 | NamoNexus homepage, title `NamoNexus — Sovereign AI Systems Studio` |
-| `/capability` | PASS — HTTP 200 | Discover → Design → Prototype → Validate and decision gates rendered |
-| `/principles` | PASS — HTTP 200 | Sovereignty, privacy, traceability, human responsibility, risk inputs rendered |
-| `/contact` | PASS — HTTP 200 | Data-minimizing form and broad timing field rendered |
-| `/not-a-real-route` | PASS — HTTP 200 SPA shell | Application 404 view rendered from the SPA shell |
+| `/` | PASS — HTTP 200 | Homepage rendered with `AI systems for decisions that matter.` and the approved NamoNexus document title |
+| `/capability` | PASS — HTTP 200 | Discover → Design → Prototype → Validate process, decision gates, and illustrative artifacts rendered |
+| `/principles` | PASS — HTTP 200 | Sovereignty, privacy, traceability, human responsibility, risk inputs, and evidence ladder rendered |
+| `/contact` | PASS — HTTP 200 | Mode A notice, data-minimizing fields, Broad timing, consent, honeypot, and disabled inquiry action rendered |
+| Unknown frontend route | PASS — SPA application 404 | `/staging-release-audit-route` served the application 404 view with `Go Home`, not a Cloudflare placeholder or Worker error |
 | `/api/health` | PASS — HTTP 200 | `{"ok":true}` |
-| `/api/contact` with valid synthetic high-level payload | PASS — HTTP 503 | `{"ok":false,"message":"The inquiry service is not configured."}`; no email was sent |
+| Direct `/api/contact` synthetic test | PASS — HTTP 503 | Generic no-provider response; no email was sent |
 
-The synthetic Contact request used only non-sensitive staging text and an `.invalid` email address. It was not a real inquiry and was not delivered to any provider.
+## Browser and mobile audit
 
-## Evidence from browser audit
+The live Contact page was inspected at a 390×844 viewport using Playwright. The document width and body width were both 390 pixels, so no horizontal overflow was observed. The `prefers-reduced-motion: reduce` media query matched successfully. The document title was `NamoNexus — Sovereign AI Systems Studio`.
 
-The live browser audit confirmed the shared navigation and page titles across the homepage, Capability, Principles, and Contact routes. The Contact page exposed name, work email, organization, organization context, conversation focus, high-level situation, broad timing, consent, and honeypot fields, with explicit instructions not to submit confidential, regulated, personal, security-sensitive, or proprietary information.
+Keyboard traversal reached the brand link, Menu button, name, email, organization, organization-context select, conversation-focus select, situation textarea, Broad timing select, honeypot, consent control, and subsequent controls in DOM order. The inquiry action remained disabled. The browser had no false success text, and the filtered network audit returned no `/api/contact`, Resend, analytics, CRM, database, or storage request. The console audit returned zero errors and zero warnings.
 
-Screenshots captured during the audit are available in the sandbox at:
+## Approval status and remaining gates
 
-```text
-/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-36-16_8329.webp
-/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-36-34_9740.webp
-/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-36-44_1398.webp
-/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-37-04_7893.webp
-```
-
-## Remaining approval gates
-
-| Gate | Status | Reason |
+| Gate | Status | Notes |
 | --- | --- | --- |
-| workers.dev staging route and API behavior | PASS | Verified from the deployed URL |
-| Real provider delivery | UNVERIFIED / intentionally disabled | No Resend secret was configured and no email was sent |
-| Cloudflare secret rotation | REQUIRED | The user-provided API token and R2 keys were pasted into chat and should be revoked/rotated |
-| Distributed rate limiting | UNVERIFIED | Candidate limiter is in-memory and single-process |
-| Privacy, legal, consent, and retention approval | UNVERIFIED | Requires owner/business/legal decision |
+| Mode A UI no-network behavior | PASS | No submission request and no false success state |
+| Frozen install, type check, tests, Vite build | PASS | 14 tests passed; exact lockfile install passed |
+| Staging deployment and workers.dev URL | PASS | Current version and deployment IDs recorded above |
+| Live route matrix | PASS | Main routes, unknown route, and health endpoint verified |
+| Contact provider delivery | NOT ENABLED | Resend secrets are absent; no email was sent |
+| Production Contact integration | NOT APPROVED | Requires privacy notice, consent, retention/deletion policy, verified sender, recipient ownership, server-only secrets, and a separate approval |
+| Cloudflare credential hygiene | REQUIRED | Revoke/rotate credentials previously pasted into chat before production work |
+| Distributed rate limiting | UNVERIFIED | Candidate in-memory limiter is not a distributed production control |
 | Production logo, wordmark, favicon, and asset rights | UNVERIFIED | Requires owner approval and rights confirmation |
-| Independent slide pixel review | UNVERIFIED | Outside this Worker staging deployment |
-| Custom domain/DNS | NOT IN SCOPE | Intentionally not configured or changed |
-| Production merge/deploy | NOT APPROVED | Staging only; explicit production approval remains required |
+| Custom domain/DNS | NOT IN SCOPE | No custom domain or DNS change was made |
+| Production merge/deploy | NOT APPROVED | This document is a staging handoff only |
 
-This evidence record makes no customer, metric, certification, security guarantee, compliance, production-readiness, delivery, or outcome claim.
+The release makes no customer, metric, certification, security-guarantee, compliance, privacy-certification, production-readiness, delivery, or outcome claim. Production deployment must remain blocked until the owner gives separate explicit approval after reviewing this evidence.
