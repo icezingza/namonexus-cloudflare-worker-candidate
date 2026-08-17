@@ -9,12 +9,14 @@ import CapabilityProcess from "./pages/CapabilityProcess";
 import Principles from "./pages/Principles";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
+import CapabilitiesRedirect from "./pages/CapabilitiesRedirect";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/capability"} component={CapabilityProcess} />
+      <Route path={"/capabilities"} component={CapabilitiesRedirect} />
       <Route path={"/principles"} component={Principles} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/privacy"} component={Privacy} />
