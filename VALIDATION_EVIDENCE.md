@@ -1,86 +1,110 @@
-# NamoNexus production candidate validation evidence
+# NamoNexus Cloudflare staging validation evidence
 
-## Source and isolation
+## Source, isolation, and repository
 
-The supplied Cloudflare Worker handoff ZIP was verified before extraction:
+The supplied Cloudflare Worker handoff ZIP was verified before extraction. Its SHA-256 is:
 
 ```text
-SHA-256: f473f1b67f075667183fcee7506b2053db2f788d5ecfa60ac12236ad1a6a9034
+f473f1b67f075667183fcee7506b2053db2f788d5ecfa60ac12236ad1a6a9034
 ```
 
-The candidate is isolated at `/home/ubuntu/namonexus-cloudflare-candidate` on branch `feature/cloudflare-worker-staging`. It has no remote configured at this checkpoint and is separate from the production source. No custom domain, DNS, Resend dashboard, or real-email action was performed.
+The candidate is isolated at `/home/ubuntu/namonexus-cloudflare-candidate` on branch `feature/cloudflare-worker-staging`. The private repository is `https://github.com/icezingza/namonexus-cloudflare-worker-candidate`. The reviewed source commit before deployment was `38c16ebc8ae717dec0d49e29c075d6f8b4745de7`. No custom domain, DNS record, production Worker, Resend configuration, or real-email action was performed.
 
-## Clean install and build
+## Local build and tests
 
-A fresh copy of the Cloudflare candidate completed the following with pnpm `10.4.1`:
+A fresh candidate install completed with pnpm `10.4.1`:
 
 ```text
 pnpm install --frozen-lockfile --ignore-scripts   PASS
 pnpm check                                        PASS
 pnpm test                                         PASS — 14 tests (8 Node + 6 Worker)
-pnpm build                                        PASS — Vite assets to `dist/public`
+pnpm build                                        PASS — Vite assets to dist/public
 ```
 
-The direct `lucide-react` dependency resolves to exact `0.453.0`, and the Resend SDK resolves to exact `6.20.0`. The build emitted the existing non-blocking Vite chunk-size advisory only. The final post-prune verification was repeated from `/tmp/namonexus-candidate-fresh-final` and produced the same PASS results.
+The direct `lucide-react` dependency resolves to exact `0.453.0`, and the Resend SDK resolves to exact `6.20.0`. The build emitted only the existing non-blocking Vite chunk-size advisory. No `.env`, provider secret, `node_modules`, or build output was committed to the repository.
 
-## Node and Worker Contact tests
+## Worker Contact tests
 
-`server/contact.test.ts` and `worker.test.ts` cover the following without calling Resend or sending an email:
+The deterministic Node and Worker tests cover empty payload, sensitive-term blocking, mock provider success, missing provider configuration, honeypot handling, unapproved origin, content type, body-size limit, and rate limiting. The missing-provider path returns a generic `503` before a provider call.
 
-| Case                           | Result                                                                |
-| ------------------------------ | --------------------------------------------------------------------- |
-| Empty payload                  | PASS — 7 field-level validation errors                                |
-| Sensitive terms                | PASS — blocked before provider state                                  |
-| Valid request with mock sender | PASS — `202`; fixed sender/recipient and validated `replyTo` asserted |
-| Missing provider configuration | PASS — generic `503`                                                  |
-| Populated honeypot             | PASS — generic `202`, payload not forwarded                           |
-| Unapproved origin              | PASS — `403`                                                          |
-| Wrong content type             | PASS — `415`                                                          |
-| Request-size limit             | PASS — `413` before JSON parsing                                      |
-| Rate limit                     | PASS — `429` with `Retry-After`                                       |
+| Case | Result |
+| --- | --- |
+| Empty payload | PASS — field-level validation errors |
+| Sensitive terms | PASS — blocked before provider state |
+| Valid request with mock sender | PASS — `202`; provider is mocked |
+| Missing provider configuration | PASS — generic `503` |
+| Populated honeypot | PASS — generic `202`; payload not forwarded |
+| Unapproved origin | PASS — `403` |
+| Wrong content type | PASS — `415` |
+| Request-size limit | PASS — `413` |
+| Rate limit | PASS — `429` with `Retry-After` |
 
-The mock sender test is deterministic and does not use a provider secret, provider endpoint, real recipient, or external network.
+## Cloudflare staging deployment
 
-## Frontend and Worker route audit
+The approved candidate was deployed to a workers.dev-only staging Worker:
 
-The Vite build emitted the four route entry behavior for the Worker asset binding. The Worker-specific tests verify `/api/health`, delegation of `/`, `/capability`, `/principles`, and `/contact` to `ASSETS.fetch`, and the expected SPA fallback configuration is recorded in `wrangler.jsonc`. A live workers.dev route remains pending deployment.
+| Item | Value |
+| --- | --- |
+| Worker name | `namonexus-production-candidate` |
+| Worker ID | `16c3de08f48242a5af0719df8e4f37e2` |
+| Version ID | `3ecfad75-7408-4e28-9940-e51ec2af0543` |
+| Deployment ID | `5c0eb1ef-bcf9-4329-a003-2467c3e232d1` |
+| Staging URL | `https://namonexus-production-candidate.icezingza.workers.dev` |
+| workers.dev subdomain | Enabled for this Worker |
+| Custom domain/DNS | Not configured or changed |
 
-| Route         | HTTP | Mobile width result                  | Favicon        |
-| ------------- | ---: | ------------------------------------ | -------------- |
-| `/`           |  200 | `clientWidth=390`, `scrollWidth=390` | `/favicon.svg` |
-| `/capability` |  200 | `clientWidth=390`, `scrollWidth=390` | `/favicon.svg` |
-| `/principles` |  200 | `clientWidth=390`, `scrollWidth=390` | `/favicon.svg` |
-| `/contact`    |  200 | `clientWidth=390`, `scrollWidth=390` | `/favicon.svg` |
+The user-provided Cloudflare API token was used only in the deployment process environment. Its value was not written to source, logs, build output, repository, or evidence files. The R2 S3 credentials were not used.
 
-Mobile navigation opened with four links. With `prefers-reduced-motion: reduce`, the media query matched and motion orbit/particle animations computed to `none`. A fresh console check returned 0 errors and 0 warnings.
+The deployed asset manifest contains four files:
 
-A final 390px keyboard traversal reached the brand link, Menu, name, work email, organization, context, focus, situation, Broad timing, consent, and submit control. The last repeated submit button is the expected subsequent Tab target after the form's interactive controls.
+| Path | Cloudflare asset hash | Size |
+| --- | --- | ---: |
+| `/assets/index-6MOBI1uY.js` | `543a1a72b9e156e1bf106a45f0eeecfb` | 357,945 bytes |
+| `/assets/index-ByL8kSJJ.css` | `2debe052c4e41abb3ad8c00fcc56950d` | 124,827 bytes |
+| `/favicon.svg` | `b78bf2e60f69b87039f26b7ec7d0b051` | 420 bytes |
+| `/index.html` | `70b68bd50e010cbdbfd810a28c2323b1` | 367,757 bytes |
 
-## Browser Contact audit
+## Live route and API matrix
 
-The latest browser run at 390×844 produced the following evidence:
+The matrix was collected from the deployed workers.dev URL after enabling the Worker subdomain. The unknown frontend path returned the Vite SPA shell and the application’s own 404 view, rather than Cloudflare’s default placeholder.
 
-- Node and Worker tests cover empty payload, sensitive terms, mock success, missing provider, honeypot, unapproved origin, content type, body size, and rate limit.
-- The Worker returns a generic `503` for a valid request when the Resend values are absent.
-- The Worker never calls Resend when the provider configuration is absent.
-- A live staging browser/network audit is pending until the Cloudflare Worker deploy succeeds.
+| Route | Result | Content evidence |
+| --- | --- | --- |
+| `/` | PASS — HTTP 200 | NamoNexus homepage, title `NamoNexus — Sovereign AI Systems Studio` |
+| `/capability` | PASS — HTTP 200 | Discover → Design → Prototype → Validate and decision gates rendered |
+| `/principles` | PASS — HTTP 200 | Sovereignty, privacy, traceability, human responsibility, risk inputs rendered |
+| `/contact` | PASS — HTTP 200 | Data-minimizing form and broad timing field rendered |
+| `/not-a-real-route` | PASS — HTTP 200 SPA shell | Application 404 view rendered from the SPA shell |
+| `/api/health` | PASS — HTTP 200 | `{"ok":true}` |
+| `/api/contact` with valid synthetic high-level payload | PASS — HTTP 503 | `{"ok":false,"message":"The inquiry service is not configured."}`; no email was sent |
 
-## Static secret and artifact scan
+The synthetic Contact request used only non-sensitive staging text and an `.invalid` email address. It was not a real inquiry and was not delivered to any provider.
 
-The candidate contains no actual `RESEND_API_KEY`, production recipient email, or provider response/message ID. The client bundle and `dist/public` contain no secret values or recipient literals. The Worker source uses only the server-side bindings defined in `wrangler.jsonc` deployment configuration. `.env` and `.env.local` remain ignored; `.env.example` contains placeholders only.
+## Evidence from browser audit
 
-Legacy case/research pages and stale metadata are not reachable in the live router. Any such files remain governed by the supplied handoff ZIP and are not part of the Worker route boundary.
+The live browser audit confirmed the shared navigation and page titles across the homepage, Capability, Principles, and Contact routes. The Contact page exposed name, work email, organization, organization context, conversation focus, high-level situation, broad timing, consent, and honeypot fields, with explicit instructions not to submit confidential, regulated, personal, security-sensitive, or proprietary information.
 
-## Remaining UNVERIFIED gates
+Screenshots captured during the audit are available in the sandbox at:
 
-| Gate                             | Status     | Reason                                                                       |
-| -------------------------------- | ---------- | ---------------------------------------------------------------------------- |
-| Cloudflare staging deployment   | UNVERIFIED | Worker deploy/authentication has not yet been performed                       |
-| Real/staging provider delivery   | UNVERIFIED | No key, recipient, or email send was used                                    |
-| Distributed rate limiting        | UNVERIFIED | Candidate uses in-memory single-process limiter                              |
-| Privacy/legal/retention approval | UNVERIFIED | Requires owner/business/legal decision                                       |
-| Production asset rights          | UNVERIFIED | Logo, wordmark, favicon, font and trademark decisions remain owner approvals |
-| Independent slide pixel review   | UNVERIFIED | Not part of this candidate server work                                       |
-| Custom domain/DNS                 | UNVERIFIED | Intentionally not configured or changed                                      |
+```text
+/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-36-16_8329.webp
+/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-36-34_9740.webp
+/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-36-44_1398.webp
+/home/ubuntu/screenshots/namonexus-production_2026-08-17_01-37-04_7893.webp
+```
 
-No production-ready, secure, compliant, delivery, response-time, confidentiality, or outcome claim is made by this evidence record.
+## Remaining approval gates
+
+| Gate | Status | Reason |
+| --- | --- | --- |
+| workers.dev staging route and API behavior | PASS | Verified from the deployed URL |
+| Real provider delivery | UNVERIFIED / intentionally disabled | No Resend secret was configured and no email was sent |
+| Cloudflare secret rotation | REQUIRED | The user-provided API token and R2 keys were pasted into chat and should be revoked/rotated |
+| Distributed rate limiting | UNVERIFIED | Candidate limiter is in-memory and single-process |
+| Privacy, legal, consent, and retention approval | UNVERIFIED | Requires owner/business/legal decision |
+| Production logo, wordmark, favicon, and asset rights | UNVERIFIED | Requires owner approval and rights confirmation |
+| Independent slide pixel review | UNVERIFIED | Outside this Worker staging deployment |
+| Custom domain/DNS | NOT IN SCOPE | Intentionally not configured or changed |
+| Production merge/deploy | NOT APPROVED | Staging only; explicit production approval remains required |
+
+This evidence record makes no customer, metric, certification, security guarantee, compliance, production-readiness, delivery, or outcome claim.
