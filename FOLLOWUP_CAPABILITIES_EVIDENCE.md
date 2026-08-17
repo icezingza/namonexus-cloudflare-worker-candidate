@@ -24,3 +24,13 @@ Added a backward-compatible `/capabilities` route that redirects to the approved
 ## Explicitly not implemented
 
 `/about` remains absent because no publishable founder/team/history facts were supplied. Contact remains inactive because real Resend configuration, verified sender domain, server-only secrets, and abuse controls are separate approval gates. Public GitHub/technical documentation remains absent because the repository is private and no public audit material has been approved. The live custom-hostname managed `robots.txt` override remains an infrastructure-level caveat requiring Cloudflare zone/edge control.
+
+## Deployment evidence
+
+- Source commit: `81e4dd4448d0a5c20d8f8a0fe4626c97c816d256`
+- Worker: `namonexus-production-candidate`
+- Deployment ID: `b7779623-ec95-42d1-9ec8-967b9a7c803a`
+- Active version ID: `894158c8-912b-4f0e-976e-bb2d81bba7f2`
+- Previous rollback target: deployment `eecdcd61-c4ff-4094-baf3-09dfded9dc8c`, version `3bf98942-8d2d-494f-b331-61dbb27c72e7`
+
+Live `/capabilities` resolved to `/capability`, rendered the approved Capability page, showed no fallback redirect text, and produced no API, analytics, or Resend-like request. The compatibility deployment did not modify DNS, custom domain configuration, Contact backend, Resend, secrets, email, storage, or analytics.
