@@ -40,4 +40,21 @@ The public MVP remains English-only. The footer now uses `© 2025–2026 NamoNex
 
 ## Deployment gate
 
-This commit is the validated source release. Deployment is permitted only to the already-confirmed `namonexus-production-candidate` Worker. DNS, custom domains, Resend, email, storage, analytics, and secrets remain outside this change. Post-deployment live route and Contact evidence must be appended to this document before the release is considered fully evidenced.
+This commit is the validated source release. Deployment was performed only to the already-confirmed `namonexus-production-candidate` Worker. DNS, custom domains, Resend, email, storage, analytics, and secrets remained outside this change.
+
+## Post-deployment evidence
+
+- Source commit deployed: `efcb84650720e4f6398f7c961a4e29959046f552`
+- Worker: `namonexus-production-candidate`
+- Deployment ID: `eecdcd61-c4ff-4094-baf3-09dfded9dc8c`
+- Version ID: `3bf98942-8d2d-494f-b331-61dbb27c72e7`
+- 100% active version confirmed by read-only Cloudflare deployment lookup at 2026-08-17T10:20Z.
+- Rollback target: deployment `f85903d2-5abc-4e92-a029-37b4a3ee7788`, version `d8f14f3c-dfe5-4be6-86f1-dc6c92418b49`. Earlier rollback remains deployment `5c0eb1ef-bcf9-4329-a003-2467c3e232d1`, version `3ecfad75-7408-4e28-9940-e51ec2af0543`.
+
+Live smoke tests returned HTTP 200 for `/`, `/capability`, `/principles`, `/contact`, `/privacy`, and an unknown SPA route. `/api/health` returned `{"ok":true}`. A GET to `/api/contact` returned 405 without provider action. The live Home DOM exposed the new title, description, canonical, footer, official LinkedIn-only link, Privacy link, and four distinct capability anchors. The live Contact DOM showed a disabled `Inquiry service not active` button, no form action, no mailto link, the approved purpose/retention/SLA policy, and no Contact/API/Resend/analytics-like performance requests.
+
+The production 390×844 Playwright audit passed on all five routes: no horizontal overflow, mobile menu opens with four links, reduced-motion disables orbit and particle animations, Contact remains disabled, no mailto fallback exists, no prototype footer text remains, no matching network requests occurred, and no console/page errors were captured.
+
+The authored `sitemap.xml` is served live as `application/xml` with the five public URLs. The Worker subdomain serves the authored 71-byte `robots.txt`, but the custom live hostname returns a Cloudflare-managed 1,907-byte robots response with Content-Signal directives instead of the authored file. This is an edge configuration behavior on the custom hostname; resolving or disabling that override requires control of the relevant Cloudflare zone/edge configuration and was not changed in this release.
+
+Final scope confirmation: no DNS, custom-domain, Resend, email, storage, analytics, or secret setting was changed. Contact remains Mode A and disabled.
