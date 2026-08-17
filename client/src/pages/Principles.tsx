@@ -1,4 +1,5 @@
 import PrototypeNav, { Footer } from "@/components/PrototypeNav";
+import SeoHead from "@/components/SeoHead";
 
 const principles = [
   ["01", "Sovereignty by design", "Make control, boundaries, and dependencies design inputs from the beginning."],
@@ -19,7 +20,7 @@ const risks = [
 ];
 
 export default function Principles() {
-  return <div className="min-h-screen bg-[#0A0F2C] text-slate-100"><PrototypeNav /><main>
+  return <div className="min-h-screen bg-[#0A0F2C] text-slate-100"><SeoHead title="NamoNexus — Principles for sovereign technology" description="Explore the NamoNexus principles, risk inputs, decision rights, and evidence ladder for sovereign technology." path="/principles" /><PrototypeNav /><main>
     <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28"><div className="mono text-cyan-300">PRINCIPLES / RISK POSTURE</div><h1 className="mt-7 max-w-5xl text-5xl font-semibold leading-[.98] tracking-[-.06em] text-white md:text-7xl">Trust is not a feature. It is a <span className="text-cyan-300">system property.</span></h1><p className="mt-7 max-w-3xl text-lg leading-8 text-slate-300">Sovereign Technology is the ability of an organization to understand, govern, and change the systems it depends on.</p></section>
     <section className="border-t border-cyan-300/15"><div className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="grid gap-12 lg:grid-cols-[.65fr_1.35fr]"><div><div className="mono text-cyan-300">OPERATING PRINCIPLES</div><h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">Make control visible.</h2></div><div className="grid border-t-2 border-cyan-300 md:grid-cols-2">{principles.map(([number,title,body])=><article key={number} className="border-b border-cyan-300/20 p-5 md:odd:border-r"><div className="mono text-fuchsia-300">{number}</div><h3 className="mt-6 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-slate-400">{body}</p></article>)}</div></div></div></section>
     <section className="border-t border-cyan-300/15"><div className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="grid gap-12 lg:grid-cols-[.65fr_1.35fr]"><div><div className="mono text-cyan-300">RISK INPUTS</div><h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">Risk is a design input, not a compliance appendix.</h2></div><div className="grid gap-8 md:grid-cols-2">{risks.map(([title,question])=><article key={title} className="border-t border-fuchsia-300/60 pt-4"><h3 className="text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-slate-400">{question}</p></article>)}</div></div></div></section>

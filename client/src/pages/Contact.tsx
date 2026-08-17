@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import PrototypeNav, { Footer } from "@/components/PrototypeNav";
+import SeoHead from "@/components/SeoHead";
 import { SITUATION_MAX_LENGTH, type ContactField } from "@shared/contact";
 
 type FormErrors = Partial<Record<ContactField, string>>;
@@ -27,6 +28,11 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-[#0A0F2C] text-slate-100">
+      <SeoHead
+        title="NamoNexus — Start a high-level conversation"
+        description="Share a high-level workflow or decision context with NamoNexus. The inquiry channel is currently being prepared and accepts no submissions."
+        path="/contact"
+      />
       <PrototypeNav />
       <main className="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[.85fr_1.15fr] lg:px-8 lg:py-28">
         <section>
@@ -62,9 +68,12 @@ export default function Contact() {
           <div className="mt-8 border border-fuchsia-300/35 bg-fuchsia-300/5 p-5" role="status" aria-live="polite">
             <div className="mono text-fuchsia-200">CONTACT CHANNEL / PREPARING</div>
             <p className="mt-3 text-sm leading-6 text-slate-300">
-              The inquiry service is not active yet. This form is available for interface review only; no information is sent or stored, and no submission can be accepted at this stage.
+              The inquiry service is not active yet. This form is available for interface review only; no information is sent or stored, and no submission can be accepted at this stage. When active, the channel will be used only to evaluate an inquiry and reply — not for marketing spam. Inquiries will be retained for up to 30 days and then deleted if no project proceeds; the founder reply target is 24–48 business hours.
             </p>
           </div>
+          <p className="mt-5 text-xs leading-5 text-slate-500">
+            Read the <a href="/privacy" className="text-cyan-300 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300">Privacy / Contact data notice</a> before sharing context.
+          </p>
           <form
             className="mt-8 grid gap-5 md:grid-cols-2"
             onSubmit={handleSubmit}
@@ -233,7 +242,7 @@ export default function Contact() {
               )}
               <div className="flex flex-col gap-4 border-t border-cyan-300/15 pt-5 md:col-span-2 md:flex-row md:items-center md:justify-between">
                 <p className="max-w-xl text-xs leading-5 text-slate-500">
-                  Contact channel is being prepared. This page does not send or store inquiry data, and there is no approved fallback email channel yet.
+                  Contact channel is being prepared. This page does not send or store inquiry data. There is no mailto fallback or other submission channel until the approved server-side configuration and abuse controls are verified.
                 </p>
                 <button
                   type="submit"

@@ -1,21 +1,187 @@
 import { Link } from "wouter";
 import PrototypeNav, { Footer } from "@/components/PrototypeNav";
+import SeoHead from "@/components/SeoHead";
 
 function MotionPanel() {
-  return <div className="relative min-h-80 overflow-hidden border border-cyan-300/30 bg-[radial-gradient(circle_at_center,rgba(0,224,255,.12),transparent_56%)]" aria-label="Decorative sovereign technology motion panel">
-    <div className="absolute left-1/2 top-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-300/40 [transform:translate(-50%,-50%)_rotate(-18deg)_scaleX(1.12)] motion-orbit" />
-    <div className="absolute left-1/2 top-1/2 size-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-fuchsia-300/35 [transform:translate(-50%,-50%)_rotate(48deg)_scaleY(.72)] motion-orbit motion-orbit-delay" />
-    <div className="absolute left-1/2 top-1/2 grid size-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-cyan-300 bg-[#0A0F2C]/90 text-3xl font-semibold text-cyan-200 shadow-[0_0_50px_rgba(0,224,255,.18)]">N</div>
-    <span className="absolute left-[22%] top-[25%] size-1.5 rounded-full bg-cyan-200 motion-particle" /><span className="absolute right-[20%] top-[38%] size-1 rounded-full bg-fuchsia-300 motion-particle motion-particle-delay" /><span className="absolute bottom-[22%] left-[38%] size-1 rounded-full bg-cyan-200 motion-particle" />
-    <div className="absolute bottom-5 left-5 font-mono text-[10px] uppercase tracking-[.16em] text-slate-500">Stable core / accountable system</div>
-  </div>;
+  return (
+    <div
+      className="relative min-h-80 overflow-hidden border border-cyan-300/30 bg-[radial-gradient(circle_at_center,rgba(0,224,255,.12),transparent_56%)]"
+      aria-label="Decorative sovereign technology motion panel"
+    >
+      <div className="absolute left-1/2 top-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-300/40 [transform:translate(-50%,-50%)_rotate(-18deg)_scaleX(1.12)] motion-orbit" />
+      <div className="absolute left-1/2 top-1/2 size-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-fuchsia-300/35 [transform:translate(-50%,-50%)_rotate(48deg)_scaleY(.72)] motion-orbit motion-orbit-delay" />
+      <div className="absolute left-1/2 top-1/2 grid size-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-cyan-300 bg-[#0A0F2C]/90 text-3xl font-semibold text-cyan-200 shadow-[0_0_50px_rgba(0,224,255,.18)]">
+        N
+      </div>
+      <span className="absolute left-[22%] top-[25%] size-1.5 rounded-full bg-cyan-200 motion-particle" />
+      <span className="absolute right-[20%] top-[38%] size-1 rounded-full bg-fuchsia-300 motion-particle motion-particle-delay" />
+      <span className="absolute bottom-[22%] left-[38%] size-1 rounded-full bg-cyan-200 motion-particle" />
+      <div className="absolute bottom-5 left-5 font-mono text-[10px] uppercase tracking-[.16em] text-slate-500">
+        Stable core / accountable system
+      </div>
+    </div>
+  );
 }
 
+const capabilities = [
+  {
+    id: "ai-strategy-discovery",
+    title: "AI Strategy & Discovery",
+    detail:
+      "Frame the decision, workflow, constraints, ownership, and evidence needed before solutioning.",
+  },
+  {
+    id: "private-ai-architecture",
+    title: "Private AI Architecture",
+    detail:
+      "Make data boundaries, provider dependencies, access controls, and operating choices available for review.",
+  },
+  {
+    id: "human-in-the-loop-workflows",
+    title: "Human-in-the-loop Workflows",
+    detail:
+      "Design review, escalation, override, and decision records around the people who remain accountable.",
+  },
+  {
+    id: "applied-ai-prototyping",
+    title: "Applied AI Prototyping",
+    detail:
+      "Build a narrow, traceable working slice that helps test assumptions before larger investment.",
+  },
+];
+
 export default function Home() {
-  return <div className="min-h-screen bg-[#0A0F2C] text-slate-100"><PrototypeNav /><main>
-    <section className="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:px-8 lg:py-28"><div><div className="mono mb-5 text-cyan-300">SOVEREIGN AI SYSTEMS STUDIO</div><h1 className="max-w-3xl text-5xl font-semibold leading-[.98] tracking-[-.06em] text-white md:text-7xl">AI systems for <span className="text-cyan-300">decisions that matter.</span></h1><p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">NamoNexus designs private, human-centered AI systems for care, learning, and organizations operating in sensitive environments.</p><div className="mt-9 flex flex-wrap gap-4"><Link href="/capability" className="rounded-sm bg-cyan-300 px-5 py-3 text-sm font-semibold text-[#0A0F2C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">View capability</Link><Link href="/contact" className="rounded-sm border border-cyan-300/60 px-5 py-3 text-sm font-semibold text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">Start a conversation</Link></div></div><MotionPanel /></section>
-    <section className="border-t border-cyan-300/15"><div className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]"><div><div className="mono text-cyan-300">WHERE WE HELP</div><h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">When context, control, and responsibility cannot be treated casually.</h2></div><div className="grid gap-8 md:grid-cols-3"><article className="border-t border-cyan-300/60 pt-4"><h3 className="text-xl font-semibold">Sensitive data</h3><p className="mt-3 text-sm leading-6 text-slate-400">Workflows where privacy, access boundaries, and data movement require explicit decisions.</p></article><article className="border-t border-cyan-300/60 pt-4"><h3 className="text-xl font-semibold">Human oversight</h3><p className="mt-3 text-sm leading-6 text-slate-400">Decisions where review, escalation, and accountability must remain visible.</p></article><article className="border-t border-cyan-300/60 pt-4"><h3 className="text-xl font-semibold">Fragmented knowledge</h3><p className="mt-3 text-sm leading-6 text-slate-400">Contexts where people need traceable assistance across distributed knowledge and systems.</p></article></div></div></div></section>
-    <section className="border-t border-cyan-300/15"><div className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><div className="mono text-cyan-300">CAPABILITY</div><h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">A method before a stack.</h2></div><Link href="/capability" className="text-sm text-cyan-300 underline-offset-4 hover:underline">Explore the process →</Link></div><div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">{["AI Strategy & Discovery","Private AI Architecture","Human-in-the-loop Workflows","Applied AI Prototyping"].map((title,index)=><Link href="/capability" key={title} className="border border-cyan-300/20 p-6 transition hover:border-cyan-300/60 focus-visible:outline-2 focus-visible:outline-cyan-200"><div className="mono text-fuchsia-300">0{index+1}</div><h3 className="mt-12 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-slate-400">Illustrative capability scope shaped with each engagement.</p></Link>)}</div></div></section>
-    <section className="border-t border-cyan-300/15"><div className="mx-auto grid max-w-7xl gap-8 px-5 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-8"><div><div className="mono text-cyan-300">PRINCIPLES</div><h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">Trust is a system property.</h2></div><div><p className="text-lg leading-8 text-slate-300">Sovereignty, privacy, traceability, human responsibility, graceful failure, and evidence before scale shape the way the work is framed.</p><Link href="/principles" className="mt-6 inline-block text-sm text-cyan-300 underline-offset-4 hover:underline">Read the principles →</Link></div></div></section>
-  </main><Footer /></div>;
+  return (
+    <div className="min-h-screen bg-[#0A0F2C] text-slate-100">
+      <SeoHead
+        title="NamoNexus — AI systems for decisions that matter"
+        description="NamoNexus designs private, human-centered AI systems for care, learning, and organizations operating in sensitive environments."
+        path="/"
+      />
+      <PrototypeNav />
+      <main>
+        <section className="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:px-8 lg:py-28">
+          <div>
+            <div className="mono mb-5 text-cyan-300">SOVEREIGN AI SYSTEMS STUDIO</div>
+            <h1 className="max-w-3xl text-5xl font-semibold leading-[.98] tracking-[-.06em] text-white md:text-7xl">
+              AI systems for <span className="text-cyan-300">decisions that matter.</span>
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
+              NamoNexus designs private, human-centered AI systems for care,
+              learning, and organizations operating in sensitive environments.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Link
+                href="/capability"
+                className="rounded-sm bg-cyan-300 px-5 py-3 text-sm font-semibold text-[#0A0F2C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              >
+                View capabilities
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-sm border border-cyan-300/60 px-5 py-3 text-sm font-semibold text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              >
+                Start a conversation
+              </Link>
+            </div>
+          </div>
+          <MotionPanel />
+        </section>
+
+        <section className="border-t border-cyan-300/15">
+          <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+            <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]">
+              <div>
+                <div className="mono text-cyan-300">WHERE WE HELP</div>
+                <h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">
+                  When context, control, and responsibility cannot be treated casually.
+                </h2>
+              </div>
+              <div className="grid gap-8 md:grid-cols-3">
+                <article className="border-t border-cyan-300/60 pt-4">
+                  <h3 className="text-xl font-semibold">Sensitive data</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    Workflows where privacy, access boundaries, and data movement require explicit decisions.
+                  </p>
+                </article>
+                <article className="border-t border-cyan-300/60 pt-4">
+                  <h3 className="text-xl font-semibold">Human oversight</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    Decisions where review, escalation, and accountability must remain visible.
+                  </p>
+                </article>
+                <article className="border-t border-cyan-300/60 pt-4">
+                  <h3 className="text-xl font-semibold">Fragmented knowledge</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    Contexts where people need traceable assistance across distributed knowledge and systems.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-cyan-300/15">
+          <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div>
+                <div className="mono text-cyan-300">CAPABILITIES</div>
+                <h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">
+                  A method before a stack.
+                </h2>
+              </div>
+              <Link
+                href="/capability"
+                className="text-sm text-cyan-300 underline-offset-4 hover:underline"
+              >
+                Explore the process →
+              </Link>
+            </div>
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {capabilities.map((capability, index) => (
+                <Link
+                  href={`/capability#${capability.id}`}
+                  key={capability.id}
+                  aria-label={`Explore ${capability.title}`}
+                  className="border border-cyan-300/20 p-6 transition hover:border-cyan-300/60 focus-visible:outline-2 focus-visible:outline-cyan-200"
+                >
+                  <div className="mono text-fuchsia-300">0{index + 1}</div>
+                  <h3 className="mt-12 text-xl font-semibold">{capability.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    {capability.detail}
+                  </p>
+                  <span className="mt-6 inline-block text-xs uppercase tracking-[.12em] text-cyan-300">
+                    View scope →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-cyan-300/15">
+          <div className="mx-auto grid max-w-7xl gap-8 px-5 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-8">
+            <div>
+              <div className="mono text-cyan-300">PRINCIPLES</div>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">
+                Trust is a system property.
+              </h2>
+            </div>
+            <div>
+              <p className="text-lg leading-8 text-slate-300">
+                Sovereignty, privacy, traceability, human responsibility, graceful failure, and evidence before scale shape the way the work is framed.
+              </p>
+              <Link
+                href="/principles"
+                className="mt-6 inline-block text-sm text-cyan-300 underline-offset-4 hover:underline"
+              >
+                Read the principles →
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
 }
