@@ -10,6 +10,9 @@ import Principles from "./pages/Principles";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import CapabilitiesRedirect from "./pages/CapabilitiesRedirect";
+import About from "./pages/About";
+import Solutions from "./pages/Solutions";
+import Security from "./pages/Security";
 
 function Router() {
   return (
@@ -20,6 +23,9 @@ function Router() {
       <Route path={"/principles"} component={Principles} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/about"} component={About} />
+      <Route path={"/solutions"} component={Solutions} />
+      <Route path={"/security"} component={Security} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

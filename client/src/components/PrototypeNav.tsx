@@ -3,7 +3,9 @@ import { Link, useLocation } from "wouter";
 
 const links = [
   { href: "/", label: "Home" },
+  { href: "/solutions", label: "Solutions" },
   { href: "/capability", label: "Capability" },
+  { href: "/security", label: "Security & Trust" },
   { href: "/principles", label: "Principles" },
   { href: "/contact", label: "Contact" },
 ];
@@ -101,6 +103,12 @@ export function Footer() {
           Illustrative content — no customer, metric, certification, or case-study claims.
         </span>
         <nav aria-label="Footer navigation" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-end">
+          <Link
+            href="/about"
+            className="text-slate-400 underline-offset-4 hover:text-cyan-300 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+          >
+            About
+          </Link>
           <Link
             href="/privacy"
             className="text-slate-400 underline-offset-4 hover:text-cyan-300 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
