@@ -106,33 +106,52 @@ const featuredProjects: Project[] = [
 
 export default function Projects() {
   return (
-    <div className="min-h-screen bg-[#0A0F2C] text-slate-100">
+    <div className="relative min-h-screen overflow-hidden bg-[#0A0F2C] text-slate-100">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,224,255,0.12),transparent_30%),radial-gradient(circle_at_80%_12%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_25%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:72px_72px] opacity-[0.08]"
+      />
       <SeoHead
         title="NamoNexus — Selected work"
         description="Selected NamoNexus project profiles focused on privacy-conscious architecture, accountable systems, and evidence-bounded public positioning."
         path="/projects"
       />
       <PrototypeNav />
-      <main>
+      <main className="relative">
         <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-          <div className="max-w-3xl">
-            <div className="mono text-cyan-300">SELECTED WORK</div>
-            <h1 className="mt-5 text-5xl font-semibold leading-[.98] tracking-[-.06em] text-white md:text-7xl">
-              Projects shaped around <span className="text-cyan-300">trust, control, and accountability.</span>
-            </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
-              NamoNexus highlights work where privacy-conscious architecture, legible system behavior, and high-accountability
-              software design matter more than inflated claims.
-            </p>
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+            <div className="max-w-3xl">
+              <div className="mono text-cyan-300">SELECTED WORK</div>
+              <h1 className="mt-5 text-5xl font-semibold leading-[.98] tracking-[-.06em] text-white md:text-7xl">
+                Projects shaped around <span className="text-cyan-300">trust, control, and accountability.</span>
+              </h1>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
+                NamoNexus highlights work where privacy-conscious architecture, legible system behavior, and high-accountability
+                software design matter more than inflated claims.
+              </p>
+            </div>
+
+            <div className="border border-cyan-300/20 bg-white/[0.03] p-6 shadow-[0_0_60px_rgba(0,224,255,0.08)] backdrop-blur-sm">
+              <div className="mono text-cyan-300">BUYER READINESS</div>
+              <div className="mt-6 space-y-4 text-sm leading-6 text-slate-300">
+                <p>Architecture before marketing language.</p>
+                <p>Operating boundary before scale assumptions.</p>
+                <p>Evidence discipline before trust claims.</p>
+              </div>
+            </div>
           </div>
           <div className="mt-10 flex flex-wrap gap-3">
-            {featuredProjects.map((project) => (
+            {featuredProjects.map((project, index) => (
               <a
                 key={project.id}
                 href={`#${project.id}`}
-                className="rounded-full border border-cyan-300/25 px-4 py-2 text-xs font-mono uppercase tracking-[.16em] text-slate-300 transition hover:border-cyan-300/60 hover:text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                className="rounded-full border border-cyan-300/25 bg-white/[0.02] px-4 py-2 text-xs font-mono uppercase tracking-[.16em] text-slate-300 transition hover:border-cyan-300/60 hover:bg-cyan-300/8 hover:text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
               >
-                {project.name}
+                {`0${index + 1} / ${project.name}`}
               </a>
             ))}
           </div>
@@ -144,8 +163,12 @@ export default function Projects() {
               "Public-safe positioning only",
               "Architecture and workflow first",
               "No unsupported performance or compliance claims",
-            ].map((item) => (
-              <div key={item} className="border border-cyan-300/15 px-5 py-4">
+            ].map((item, index) => (
+              <div key={item} className="relative overflow-hidden border border-cyan-300/15 px-5 py-4">
+                <div
+                  aria-hidden="true"
+                  className={`absolute inset-x-0 top-0 h-px ${index === 1 ? "bg-fuchsia-300/70" : "bg-cyan-300/70"}`}
+                />
                 <div className="mono text-cyan-300">REVIEW STARTS HERE</div>
                 <p className="mt-3 text-sm leading-6 text-slate-300">{item}</p>
               </div>
@@ -156,19 +179,28 @@ export default function Projects() {
         <section className="border-t border-cyan-300/15">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
             <div className="grid gap-6 lg:grid-cols-2">
-              {featuredProjects.map((project) => (
+              {featuredProjects.map((project, index) => (
                 <article
                   key={project.id}
-                  className="border border-cyan-300/20 bg-white/[0.02] p-7 transition hover:border-cyan-300/50"
+                  className="group relative overflow-hidden border border-cyan-300/20 bg-white/[0.03] p-7 transition hover:border-cyan-300/50 hover:bg-white/[0.05]"
                 >
+                  <div
+                    aria-hidden="true"
+                    className={`absolute inset-x-0 top-0 h-1 ${index % 2 === 0 ? "bg-[linear-gradient(90deg,rgba(0,224,255,0.85),transparent)]" : "bg-[linear-gradient(90deg,rgba(217,70,239,0.65),rgba(0,224,255,0.45),transparent)]"}`}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute -right-16 top-8 size-36 rounded-full bg-cyan-300/8 blur-3xl transition group-hover:bg-cyan-300/12"
+                  />
                   <div className="mono text-cyan-300">{project.category}</div>
                   <h2 className="mt-6 text-3xl font-semibold tracking-[-0.04em] text-white">{project.name}</h2>
                   <p className="mt-4 text-base leading-7 text-slate-300">{project.summary}</p>
                   <a
                     href={`#${project.id}`}
-                    className="mt-8 inline-flex rounded-sm border border-cyan-300/40 px-4 py-2 text-sm font-semibold text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                    className="mt-8 inline-flex items-center gap-2 rounded-sm border border-cyan-300/40 px-4 py-2 text-sm font-semibold text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
                   >
                     View details
+                    <span aria-hidden="true">→</span>
                   </a>
                 </article>
               ))}
@@ -193,7 +225,10 @@ export default function Projects() {
                   </div>
 
                   <div>
-                    <p className="text-lg leading-8 text-slate-300">{project.context}</p>
+                    <div className="border border-cyan-300/15 bg-white/[0.02] p-6">
+                      <div className="mono text-cyan-300">OPERATING CONTEXT</div>
+                      <p className="mt-4 text-lg leading-8 text-slate-300">{project.context}</p>
+                    </div>
 
                     <div className="mt-8 grid gap-4 md:grid-cols-2">
                       {project.scope.map((item) => (
