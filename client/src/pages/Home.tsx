@@ -50,6 +50,37 @@ const capabilities = [
   },
 ];
 
+const featuredProjects = [
+  {
+    href: "/projects#nre",
+    category: "Sovereign AI Infrastructure",
+    name: "NamoNexus Resonance Engine",
+    summary:
+      "Core systems foundation for privacy-sensitive, locally governed AI applications.",
+  },
+  {
+    href: "/projects#ipd-smart-sentinel",
+    category: "Healthcare Safety Systems",
+    name: "IPD Smart Sentinel",
+    summary:
+      "Privacy-first inpatient safety monitoring built around sovereign edge processing and event evidence.",
+  },
+  {
+    href: "/projects#aegisgrid",
+    category: "Security Infrastructure",
+    name: "AegisGrid",
+    summary:
+      "Security foundations library for authentication, encryption, endpoint protection, and audit patterns.",
+  },
+  {
+    href: "/projects#smart-classroom",
+    category: "AI Education Systems",
+    name: "NamoNexus Smart Classroom",
+    summary:
+      "AI-assisted guided learning shaped around retrieval-backed study and ethical system design.",
+  },
+] as const;
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0A0F2C] text-slate-100">
@@ -177,6 +208,41 @@ export default function Home() {
               >
                 Read the principles →
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-cyan-300/15">
+          <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div>
+                <div className="mono text-cyan-300">SELECTED WORK</div>
+                <h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">
+                  Systems built for contexts that cannot be treated casually.
+                </h2>
+              </div>
+              <Link
+                href="/projects"
+                className="text-sm text-cyan-300 underline-offset-4 hover:underline"
+              >
+                View all projects →
+              </Link>
+            </div>
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
+              {featuredProjects.map((project, index) => (
+                <a
+                  href={project.href}
+                  key={project.name}
+                  className="border border-cyan-300/20 p-6 transition hover:border-cyan-300/60 focus-visible:outline-2 focus-visible:outline-cyan-200"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="mono text-fuchsia-300">0{index + 1}</div>
+                    <div className="mono text-cyan-300">{project.category}</div>
+                  </div>
+                  <h3 className="mt-10 text-2xl font-semibold">{project.name}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">{project.summary}</p>
+                </a>
+              ))}
             </div>
           </div>
         </section>

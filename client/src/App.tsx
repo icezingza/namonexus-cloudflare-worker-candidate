@@ -10,6 +10,7 @@ import Principles from "./pages/Principles";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import CapabilitiesRedirect from "./pages/CapabilitiesRedirect";
+import Projects from "./pages/Projects";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/capability"} component={CapabilityProcess} />
       <Route path={"/capabilities"} component={CapabilitiesRedirect} />
+      <Route path={"/projects"} component={Projects} />
       <Route path={"/principles"} component={Principles} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/privacy"} component={Privacy} />

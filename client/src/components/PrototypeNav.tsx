@@ -4,6 +4,7 @@ import { Link, useLocation } from "wouter";
 const links = [
   { href: "/", label: "Home" },
   { href: "/capability", label: "Capability" },
+  { href: "/projects", label: "Projects" },
   { href: "/principles", label: "Principles" },
   { href: "/contact", label: "Contact" },
 ];
