@@ -81,6 +81,13 @@ const featuredProjects = [
   },
 ] as const;
 
+const founderFocus = [
+  "Sovereign AI architecture",
+  "Healthcare information technology",
+  "Domain-driven design",
+  "Data architecture",
+] as const;
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0A0F2C] text-slate-100">
@@ -208,6 +215,64 @@ export default function Home() {
               >
                 Read the principles →
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-cyan-300/15">
+          <div className="mx-auto grid max-w-7xl gap-8 px-5 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+            <div>
+              <div className="mono text-cyan-300">PROFILE</div>
+              <h2 className="mt-4 text-4xl font-semibold tracking-[-.04em] text-white">
+                Kanin Raksaraj
+              </h2>
+              <p className="mt-4 max-w-xl text-lg leading-8 text-slate-300">
+                Architect profile shaped around accountable AI systems, privacy-conscious design, and human-defined operating boundaries.
+              </p>
+              <div className="mt-6 text-sm text-slate-400">Phuket, Thailand</div>
+            </div>
+
+            <div>
+              <div className="border border-cyan-300/20 bg-white/[0.03] p-7">
+                <div className="mono text-cyan-300">PUBLIC POSITIONING</div>
+                <p className="mt-4 text-lg leading-8 text-slate-300">
+                  Kanin Raksaraj leads architecture work at NamoNexus with a focus on sovereign AI systems,
+                  careful decision support, and technical designs that remain legible, governable, and reviewable
+                  in sensitive environments.
+                </p>
+                <p className="mt-4 text-base leading-7 text-slate-400">
+                  The public profile emphasizes system thinking, safety-conscious design, and deployment boundaries
+                  rather than unsupported certification, performance, or compliance claims.
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {founderFocus.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-cyan-300/20 bg-cyan-300/5 px-4 py-2 text-xs font-mono uppercase tracking-[.12em] text-cyan-200"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <a
+                    href="https://www.linkedin.com/in/kanin-raksaraj-504b1b399/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-sm bg-cyan-300 px-5 py-3 text-sm font-semibold text-[#0A0F2C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                  >
+                    View LinkedIn
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="rounded-sm border border-cyan-300/40 px-5 py-3 text-sm font-semibold text-cyan-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                  >
+                    Start a conversation
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>
